@@ -16,6 +16,8 @@ Gmail · Notion 연동 스케줄러. 웹 중심(PWA)으로 웹 / 모바일웹 / 
 
 - Next.js 16 (App Router, `src/app`) + TypeScript
 - Tailwind CSS v4 (`src/app/globals.css` 에서 `@import "tailwindcss"`, 별도 config 파일 없음)
+- 인증: Better Auth (`src/lib/auth.ts`, 핸들러 `src/app/api/auth/[...all]`). 현재 DB 없는 stateless 모드로 세션·Google 토큰을 암호화 쿠키에 저장
+- Gmail: `@googleapis/gmail`, 읽기 전용 스코프. 호출은 `src/lib/gmail.ts` + Route Handler(`/api/gmail/*`)에서만. RSC 에서는 토큰 갱신 쿠키를 못 쓰므로 Route Handler/Server Action 에서 `getAccessToken({ useAccountCookie: true })` 사용
 - PWA: `src/app/manifest.ts`, 서비스 워커 `src/lib/service-worker.js`, 등록 `src/components/pwa.tsx`
 
 ## 명령어
