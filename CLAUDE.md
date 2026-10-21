@@ -16,8 +16,8 @@ Gmail · Notion 연동 스케줄러. 웹 중심(PWA)으로 웹 / 모바일웹 / 
 
 - Next.js 16 (App Router, `src/app`) + TypeScript
 - Tailwind CSS v4 (`src/app/globals.css` 에서 `@import "tailwindcss"`, 별도 config 파일 없음)
-- 인증: Better Auth (`src/lib/auth.ts`, 핸들러 `src/app/api/auth/[...all]`). 현재 DB 없는 stateless 모드로 세션·Google 토큰을 암호화 쿠키에 저장
-- Gmail: `@googleapis/gmail`, 읽기 전용 스코프. 호출은 `src/lib/gmail.ts` + Route Handler(`/api/gmail/*`)에서만. RSC 에서는 토큰 갱신 쿠키를 못 쓰므로 Route Handler/Server Action 에서 `getAccessToken({ useAccountCookie: true })` 사용
+- Gmail: IMAP(`imapflow`) + 앱 비밀번호로 본인 계정 받은편지함을 읽는다 (`src/lib/gmail.ts`, server-only). Google Cloud/OAuth 미사용
+- 접근 제어: `src/proxy.ts` 의 HTTP Basic 인증 (`APP_PASSWORD`). 배포 환경에서 미설정 시 전부 차단
 - PWA: `src/app/manifest.ts`, 서비스 워커 `src/lib/service-worker.js`, 등록 `src/components/pwa.tsx`
 
 ## 명령어
@@ -32,6 +32,6 @@ npm run lint    # 린트
 
 ## 규칙
 
-- 비밀 값(Google/Notion 시크릿, VAPID 개인키)은 `.env.local` 에만 두고 커밋하지 않는다. 브라우저에 노출해도 되는 값만 `NEXT_PUBLIC_` 접두사.
-- Gmail/Notion API 호출과 토큰 보관은 서버(Route Handler, Server Action)에서만 한다.
+- 비밀 값(Gmail 앱 비밀번호, Notion 시크릿, VAPID 개인키)은 `.env.local` 에만 두고 커밋하지 않는다. 브라우저에 노출해도 되는 값만 `NEXT_PUBLIC_` 접두사.
+- Gmail/Notion 자격 증명과 API 호출은 서버(Server Component, Route Handler, Server Action)에서만 다룬다.
 - 커밋 메시지는 한글 + Conventional Commits 접두사.
