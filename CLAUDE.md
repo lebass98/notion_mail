@@ -1,50 +1,35 @@
-This is an Expo/React Native mobile application. Prioritize mobile-first patterns, performance, and cross-platform compatibility.
+<!-- BEGIN:nextjs-agent-rules -->
 
-## Expo has changed — do not trust your training data
+## This is NOT the Next.js you know
 
-Expo ships breaking changes every SDK release. APIs you remember are likely renamed, moved, or removed. Before writing any code that touches an Expo, EAS, or React Native API:
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 
-1. Read the major version of the `expo` package in `package.json`.
-2. Fetch the matching versioned docs: `https://docs.expo.dev/versions/v<major>.0.0/`
-3. For anything else, fetch https://docs.expo.dev/llms.txt — an index of all Expo docs with corrections to common LLM misconceptions. Follow its links to the specific page you need; never answer from memory.
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
-## Commands
+<!-- END:nextjs-agent-rules -->
 
-Use `bunx` instead of `npx` if the project uses bun (`bun.lock` present).
+# Mail Notion
+
+Gmail · Notion 연동 스케줄러. 웹 중심(PWA)으로 웹 / 모바일웹 / Android(홈 화면 설치) / macOS(Dock 설치)를 하나의 코드로 지원한다.
+
+## 스택
+
+- Next.js 16 (App Router, `src/app`) + TypeScript
+- Tailwind CSS v4 (`src/app/globals.css` 에서 `@import "tailwindcss"`, 별도 config 파일 없음)
+- PWA: `src/app/manifest.ts`, 서비스 워커 `src/lib/service-worker.js`, 등록 `src/components/pwa.tsx`
+
+## 명령어
 
 ```bash
-npx expo install <package>  # ALWAYS use instead of npm/yarn/pnpm/bun add — resolves SDK-compatible versions
-npx expo start              # start the dev server
-npx expo lint               # lint
-npx tsc --noEmit            # typecheck
-npx expo-doctor             # diagnose dependency and config issues
-npx expo install --fix      # fix incompatible package versions
+npm run dev     # 개발 서버
+npm run build   # 프로덕션 빌드
+npm run lint    # 린트
 ```
 
-Run lint and typecheck before declaring any task done.
+푸시 알림을 로컬에서 테스트할 때는 HTTPS 가 필요하다: `npx next dev --experimental-https`
 
-## Navigation & Routing
+## 규칙
 
-- Use **Expo Router** for all navigation. Routes live in `src/app/` — every file there is a screen, `_layout.tsx` files define navigators. Keep non-route code (components, hooks, utils) outside `src/app/`.
-- Import `Link`, `router`, and `useLocalSearchParams` from `expo-router`.
-- Docs: https://docs.expo.dev/router/introduction.md
-
-## Building with EAS
-
-Use EAS to build, sign, and submit the app in the cloud (`eas build`, `eas submit`) and to ship over-the-air updates (`eas update`) — no local Xcode or Android Studio required. Run EAS CLI as `bunx eas-cli <command>` in Bun projects, or `npx eas-cli@latest <command>` otherwise; substitute that for bare `eas` in docs examples.
-Docs: https://docs.expo.dev/eas/index.md
-
-## Rules
-
-- If `ios/` and `android/` directories do not exist, they are generated (Continuous Native Generation). Never create or edit them by hand — configure native behavior in `app.json` and config plugins.
-- Expo Go only includes its bundled native modules. After adding a library with native code, the app needs a development build: `npx expo run:ios|android` locally, or `eas build --profile development`.
-- Prefer recommended Expo modules over third-party libraries, and check your available skills before adding dependencies. Docs: https://docs.expo.dev/versions/latest/index.md
-
-## 프로젝트 개요
-
-Gmail · Notion 연동 스케줄 앱 (iOS / Android / Web / macOS 예정).
-
-- 스택: Expo SDK 58 + Expo Router + TypeScript + NativeWind v4 (Tailwind CSS v3)
-- 스타일: `className` 으로 Tailwind 유틸리티 사용. 설정은 `tailwind.config.js`, 진입 CSS는 `src/global.css`
-- 비밀 값(API 키, OAuth 클라이언트 등)은 `.env.local` 에 두고 커밋하지 않음. 공개 가능한 값만 `EXPO_PUBLIC_` 접두사 사용
-- 커밋 메시지는 한글 + Conventional Commits 접두사
+- 비밀 값(Google/Notion 시크릿, VAPID 개인키)은 `.env.local` 에만 두고 커밋하지 않는다. 브라우저에 노출해도 되는 값만 `NEXT_PUBLIC_` 접두사.
+- Gmail/Notion API 호출과 토큰 보관은 서버(Route Handler, Server Action)에서만 한다.
+- 커밋 메시지는 한글 + Conventional Commits 접두사.
