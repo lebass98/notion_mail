@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { MailList } from "@/components/mail-list";
+import { InboxView } from "@/components/inbox-view";
 import { InstallHint } from "@/components/pwa";
 
 export default function Home() {
@@ -10,12 +10,9 @@ export default function Home() {
         <p className="text-neutral-500">Gmail · Notion 연동 스케줄러</p>
       </header>
 
-      <section className="flex flex-col gap-4">
-        <h2 className="text-lg font-semibold">최근 메일</h2>
-        <Suspense fallback={<p className="text-sm text-neutral-500">메일 불러오는 중…</p>}>
-          <MailList />
-        </Suspense>
-      </section>
+      <Suspense fallback={<p className="text-sm text-neutral-500">불러오는 중…</p>}>
+        <InboxView />
+      </Suspense>
 
       <section className="flex items-center gap-4 rounded-2xl border border-dashed border-neutral-200 p-4 dark:border-neutral-800">
         <span className="h-10 w-10 shrink-0 rounded-xl bg-neutral-900 dark:bg-neutral-100" />

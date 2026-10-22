@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Claude 가 Gmail 에서 불러온 메일 데이터 (개인정보)
+/data/

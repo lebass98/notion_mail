@@ -16,7 +16,7 @@ Gmail · Notion 연동 스케줄러. 웹 중심(PWA)으로 웹 / 모바일웹 / 
 
 - Next.js 16 (App Router, `src/app`) + TypeScript
 - Tailwind CSS v4 (`src/app/globals.css` 에서 `@import "tailwindcss"`, 별도 config 파일 없음)
-- Gmail: IMAP(`imapflow`) + 앱 비밀번호로 본인 계정 받은편지함을 읽는다 (`src/lib/gmail.ts`, server-only). Google Cloud/OAuth 미사용
+- Gmail: 앱은 Gmail 에 직접 접속하지 않는다. Claude 가 `/fetch-mail` 스킬(`.claude/skills/fetch-mail`)로 Gmail 커넥터에서 메일을 읽고 일정을 뽑아 `data/inbox.json`(gitignore)에 저장하면, `src/lib/inbox.ts` 가 읽어 화면에 표시한다
 - 접근 제어: `src/proxy.ts` 의 HTTP Basic 인증 (`APP_PASSWORD`). 배포 환경에서 미설정 시 전부 차단
 - PWA: `src/app/manifest.ts`, 서비스 워커 `src/lib/service-worker.js`, 등록 `src/components/pwa.tsx`
 
@@ -32,6 +32,6 @@ npm run lint    # 린트
 
 ## 규칙
 
-- 비밀 값(Gmail 앱 비밀번호, Notion 시크릿, VAPID 개인키)은 `.env.local` 에만 두고 커밋하지 않는다. 브라우저에 노출해도 되는 값만 `NEXT_PUBLIC_` 접두사.
+- 비밀 값(Notion 시크릿, VAPID 개인키, APP_PASSWORD)과 메일 데이터(`data/`)은 `.env.local` 에만 두고 커밋하지 않는다. 브라우저에 노출해도 되는 값만 `NEXT_PUBLIC_` 접두사.
 - Gmail/Notion 자격 증명과 API 호출은 서버(Server Component, Route Handler, Server Action)에서만 다룬다.
 - 커밋 메시지는 한글 + Conventional Commits 접두사.
